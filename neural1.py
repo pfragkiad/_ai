@@ -34,12 +34,10 @@ model.compile(optimizer='RMSprop',loss='binary_crossentropy', metrics = ['accura
 #     loss = losses.binary_crossentropy,
 #     metrics = metrics.accuracy)
 
-model.summary()
-
 model.fit(X,y, epochs = 200) #@10 epoch the model is perfect
-
 loss, acc = model.evaluate(X,y, verbose=0)
 
+model.summary()
 w = model.get_weights();
 print(len(w))
 print(w)
