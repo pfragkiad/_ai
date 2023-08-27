@@ -43,14 +43,14 @@ print("Pixels in range: ", np.min(train_images), np.max(train_images)) #0-255
 train_images_normal =  train_images/255.0
 test_images_normal = test_images/255.0
 
-plt.figure(figsize = (17,8))
-for i in range(32):
-    plt.subplot(4,8,i+1)
-    plt.xticks([])
-    plt.yticks([])
-    plt.imshow(train_images_normal[i], cmap=plt.cm.binary)
-    plt.xlabel(class_names[train_labels[i]])
-#plt.show()
+# plt.figure(figsize = (17,8))
+# for i in range(32):
+#     plt.subplot(4,8,i+1)
+#     plt.xticks([])
+#     plt.yticks([])
+#     plt.imshow(train_images_normal[i], cmap=plt.cm.binary)
+#     plt.xlabel(class_names[train_labels[i]])
+# plt.show()
 
 import os
 file : str = 'model_01.dat'
@@ -81,10 +81,12 @@ predictions = model.predict(test_images_normal)
 print(type(predictions))
 
 import heapq
+#prediction confidences
 predictionPercentages = predictions[0]
 print(predictionPercentages)
 largestValues = heapq.nlargest(2,predictionPercentages)
 print(f'Real value: {class_names[test_labels[0]]}')
+#print(sum(predictionPercentages))
 for m in largestValues:
     i = np.where(predictionPercentages==m)[0][0]
     print(f'Predicted value: {class_names[i]} with probability {m:.01%}') 
@@ -92,3 +94,23 @@ for m in largestValues:
 
 predictedValue = class_names[np.argmax(predictionPercentages)]
 print(f"Best prediction: {predictedValue}")
+
+plt.figure()
+for i in range(16):
+    plt.subplot(4,8,2*i+1)
+    plt.xticks([])
+    plt.yticks([])
+    bestPrediction : int = np.argmax(predictions[i])
+    bestPredictionPercentage: float = np.max(predictions[i])
+    color = 'blue' if bestPrediction == test_labels[i] else 'red'
+    plt.imshow(test_images_normal[i], cmap=plt.cm.binary)
+    plt.xlabel(f'{class_names[bestPrediction]} {bestPredictionPercentage:.1%} ({class_names[test_labels[i]]})')
+    plt.subplot(4,8,2*i+2)
+    plt.xticks(range(10))
+    plt.yticks([])
+    barPlot = plt.bar(range(10), predictions[i], color='grey')
+    plt.ylim([0,1])
+    barPlot[bestPrediction].set_color('red')
+    barPlot[test_labels[i]].set_color('blue')
+
+plt.show()
