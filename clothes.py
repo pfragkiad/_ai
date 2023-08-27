@@ -1,3 +1,5 @@
+from __future__ import annotations #list[str] support
+
 import numpy as np
 
 import matplotlib.pyplot as plt
@@ -14,7 +16,7 @@ print(test_labels.shape) #(10000, )
 #from typing import TypeAlias
 #stringList : TypeAlias = list[str]
 
-class_names : list = ["T-shirt/top",
+class_names : 'list[str]' = ["T-shirt/top",
 "Trouser",
 "Pullover",
 "Dress",
