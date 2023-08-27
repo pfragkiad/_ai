@@ -26,7 +26,7 @@ class_names : 'list[str]' = ["T-shirt/top",
 "Sneaker",
 "Bag",
 "Ankle boot"]
-
+ 
 #images are stored as 28x28 numpy arrays, pixels from 0 to 255
 #labels array of integers from 0 to 9
 
@@ -74,3 +74,21 @@ else:
 model.summary()
 test_loss, test_accuracy = model.evaluate(test_images_normal, test_labels, verbose = 2)
 print(f'Test accuracy: {test_accuracy:.1%}')
+
+#see results (returns 10 numbers per test image!)
+#np.ndarray
+predictions = model.predict(test_images_normal)
+print(type(predictions))
+
+import heapq
+predictionPercentages = predictions[0]
+print(predictionPercentages)
+largestValues = heapq.nlargest(2,predictionPercentages)
+print(f'Real value: {class_names[test_labels[0]]}')
+for m in largestValues:
+    i = np.where(predictionPercentages==m)[0][0]
+    print(f'Predicted value: {class_names[i]} with probability {m:.01%}') 
+
+
+predictedValue = class_names[np.argmax(predictionPercentages)]
+print(f"Best prediction: {predictedValue}")
