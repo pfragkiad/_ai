@@ -11,7 +11,10 @@ print(train_labels.shape) #(60000,)
 print(test_images.shape) #(10000, 28, 28)
 print(test_labels.shape) #(10000, )
 
-class_names = ["T-shirt/top",
+#from typing import TypeAlias
+#stringList : TypeAlias = list[str]
+
+class_names : list = ["T-shirt/top",
 "Trouser",
 "Pullover",
 "Dress",
@@ -47,9 +50,25 @@ for i in range(32):
     plt.xlabel(class_names[train_labels[i]])
 #plt.show()
 
-from keras import layers
-model = tf.keras.Sequential()
-model.add(layers.Flatten(input_shape= train_images.shape[1:])) #28, 28, = 784 output
-model.add(layers.Dense(128,activation = "relu"))
-model.add(layers.Dense(10,activation= 'softmax'))
+import os
+file : str = 'model_01.dat'
+model : tf.keras.Model 
+if os.path.exists(file):
+    model = tf.keras.models.load_model(file)
+else:
+    from keras import layers
+    model = tf.keras.Sequential()
+    model.add(layers.Flatten(input_shape= train_images.shape[1:])) #28, 28, = 784 output
+    model.add(layers.Dense(128,activation = "relu"))
+    model.add(layers.Dense(10, activation= 'softmax')) #if from_logits=true then softmax is not needed here
+    model.compile(
+        optimizer = 'adam',
+        loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
+        metrics = ['accuracy'])
+    #feed
+    model.fit(train_images_normal, train_labels, epochs = 10) #not a lot of epochs to avoid overfitting
+    model.save(file)
+
 model.summary()
+test_loss, test_accuracy = model.evaluate(test_images_normal, test_labels, verbose = 2)
+print(f'Test accuracy: {test_accuracy:.1%}')
