@@ -106,7 +106,8 @@ for i in range(16):
     plt.imshow(test_images_normal[i], cmap=plt.cm.binary)
     plt.xlabel(f'{class_names[bestPrediction]} {bestPredictionPercentage:.1%} ({class_names[test_labels[i]]})')
     plt.subplot(4,8,2*i+2)
-    plt.xticks(range(10))
+    #plt.xticks(range(10))
+    plt.xticks(range(10),class_names,rotation=90)
     plt.yticks([])
     barPlot = plt.bar(range(10), predictions[i], color='grey')
     plt.ylim([0,1])
@@ -114,3 +115,11 @@ for i in range(16):
     barPlot[test_labels[i]].set_color('blue')
 
 plt.show()
+
+#insert a new axis with expand_dims
+#add a single image to the batch
+img = np.expand_dims(test_images[50],0) # (28,28) to (1, 28, 28)
+#print(img.shape)
+predictions_img = model.predict(img)
+max_confidence = np.argmax(predictions_img)
+print(f"Prediction: {class_names[max_confidence]}, Real: {class_names[test_labels[50]]}")
