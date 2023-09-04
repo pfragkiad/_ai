@@ -1,5 +1,6 @@
 import numpy as np
 
+import keras.models
 from keras.models import Sequential
 
 import keras.layers as l
@@ -26,9 +27,21 @@ featuresCount = X.shape[1]
 samplesCount = X.shape[0]
 
 import models
-model  = models.getDetailedModel(featuresCount, 4)
+model : keras.models.Sequential  = models.getDetailedModel(featuresCount, 4)
+# model.get_layer(name = 'First layer')
+# model.get_layer(index=0)
+# model.pop()
 
+import tensorflow as tf
+
+def custom_loss(y_true,y_pred):
+    sq = tf.square(y_true-y_pred)
+    return tf.reduce_mean(sq,axis=-1) #same as mse
+#model.compile(optimizer='RMSprop',loss=custom_loss, metrics = ['accuracy'])
+ 
 model.compile(optimizer='RMSprop',loss='binary_crossentropy', metrics = ['accuracy'])
+
+
 # model.compile(
 #     optimizer='RMSprop',
 #     loss = losses.binary_crossentropy,

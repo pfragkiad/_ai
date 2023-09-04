@@ -11,6 +11,13 @@ def getCompactModel(featuresPerSample : int,  nodesCount: int) -> models.Model :
     model.add(layers.Dense(1,activation=activations.sigmoid))
     return model
 
+def getCompactModel2(featuresPerSample : int,  nodesCount: int) -> models.Model :
+    return models.Sequential(
+        [
+            layers.Dense(nodesCount , input_shape = (featuresPerSample,), name = 'Input layer'),
+            layers.Dense(1,activation=activations.sigmoid, name = 'Last layer')
+        ])
+
 def getDetailedModel(featuresPerSample : int,  nodesCount: int) -> models.Model :
     model = models.Sequential()
     model.add(layers.InputLayer(input_shape = (featuresPerSample,),))
